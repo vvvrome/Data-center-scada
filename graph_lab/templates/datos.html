@@ -15,6 +15,12 @@ Datos | Python Graph Lab
 
 <form method="POST">
 
+    <input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+    >
+
     <label for="x">Valores X</label>
 
     <input
@@ -73,6 +79,7 @@ Datos | Python Graph Lab
     <button type="submit">
         Generar gráfica
     </button>
+
 
 </form>
 

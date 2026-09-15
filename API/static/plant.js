@@ -505,39 +505,6 @@ async function updatePlantAlerts() {
                     }
                 )
                 .join("");
-        const security = data.security;
-
-            if (security) {
-
-                const securityStatus =
-                    document.getElementById(
-                        "security-controller-status"
-                    );
-
-                const channelStatus =
-                    document.getElementById(
-                        "security-channel-status"
-                    );
-
-                const lastAction =
-                    document.getElementById(
-                        "security-last-action"
-                    );
-
-                securityStatus.textContent =
-                    security.status;
-
-                channelStatus.textContent =
-                    security.channel_status;
-
-                lastAction.textContent =
-                    `● ${security.last_action}`;
-
-                lastAction.className =
-                    `device-status ${
-                        security.status.toLowerCase()
-                    }`;
-            }
 
             async function runQKDSession(eve = false) {
 
@@ -552,24 +519,19 @@ async function updatePlantAlerts() {
 
 
                 try {
+                    const csrfToken = document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute("content");
 
-                    const response =
-                        await fetch(
-                            "/api/plant/qkd/session",
-                            {
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
-
-                                body:
-                                    JSON.stringify({
-                                        eve: eve
-                                    })
-                            }
-                        );
+                    const response = await fetch("/api/plant/qkd/session", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": csrfToken
+                        },
+                        body: JSON.stringify({ eve })
+                    })
+                        
 
 
                     if (!response.ok) {

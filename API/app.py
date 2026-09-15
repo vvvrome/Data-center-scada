@@ -11,6 +11,9 @@ from flask import (
     session
 )
 
+from flask_wtf.csrf import CSRFProtect, CSRFError
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from functools import wraps
 from graph_lab.routes import graph_bp
 
@@ -23,8 +26,45 @@ def create_app(
 ):
 
     app = Flask(__name__)
-    app.secret_key = os.environ.get("FLASK_SECRET_KEY")
-    app.config["SESSION_PERMANENT"] = False
+
+    # =========================================================
+    # CONFIGURACIÓN DE SEGURIDAD
+    # =========================================================
+
+    # La clave secreta se obtiene del entorno, no del código.
+    app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY")
+
+    if not app.config["SECRET_KEY"]:
+        raise RuntimeError(
+            "SECRET_KEY no configurada."
+        )
+
+    app.config.update(
+        SESSION_PERMANENT=False,
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE="Lax"
+    )
+
+    # Activar solamente cuando la aplicación funcione con HTTPS.
+    # app.config["SESSION_COOKIE_SECURE"] = True
+
+    # Protección CSRF
+    csrf = CSRFProtect()
+    csrf.init_app(app)
+
+    # Rate limiting.
+    # memory:// sirve para desarrollo. Para producción conviene Redis
+    # u otro almacenamiento compartido.
+    limiter = Limiter(
+        key_func=get_remote_address,
+        app=app,
+        storage_uri="memory://",
+        default_limits=[
+            "200 per day",
+            "50 per hour"
+        ]
+    )
+
     app.register_blueprint(graph_bp)
     from database.users import (
         authenticate_user,
@@ -74,6 +114,53 @@ def create_app(
             user_agent=request.headers.get("User-Agent"),
             details=details
         )
+
+    # =========================================================
+    # ERRORES CSRF
+    # =========================================================
+
+    @app.errorhandler(CSRFError)
+    def handle_csrf_error(error):
+        audit(
+            session.get("username", "UNKNOWN"),
+            "CSRF_BLOCKED",
+            "BLOCKED",
+            request.path
+        )
+        return "Solicitud rechazada.", 400
+
+    # =========================================================
+    # CABECERAS DE SEGURIDAD
+    # =========================================================
+
+    @app.after_request
+    def security_headers(response):
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = (
+            "strict-origin-when-cross-origin"
+        )
+        response.headers["Permissions-Policy"] = (
+            "camera=(), "
+            "microphone=(), "
+            "geolocation=()"
+        )
+
+        # CSP compatible con Plotly. Se mantiene unsafe-inline
+        # temporalmente porque las páginas actuales contienen JS inline.
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' https://cdn.plot.ly https://cdn.jsdelivr.net; "
+            "style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data:; "
+            "font-src 'self'; "
+            "connect-src 'self'; "
+            "frame-ancestors 'none'; "
+            "base-uri 'self'; "
+            "form-action 'self';"
+        )
+
+        return response
 
     @app.route("/login", methods=["GET", "POST"])
     def login():

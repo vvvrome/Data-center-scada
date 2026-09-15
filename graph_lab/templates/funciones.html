@@ -15,6 +15,12 @@ Funciones | Python Graph Lab
 
 <form method="POST">
 
+    <input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+    >
+    
     <label for="funcion">
         Función f(x):
     </label>

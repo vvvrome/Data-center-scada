@@ -187,7 +187,13 @@
         {% endif %}
 
 
-        <form method="POST">
+        <form method="POST" action="{{ url_for('register') }}">
+
+            <input 
+            type="hidden"
+            name="csrf_token"
+            value="{{ csrf_token() }}"
+            >
 
             <label>
                 Usuario
@@ -197,6 +203,7 @@
                 type="text"
                 name="username"
                 minlength="3"
+                placeholder="Usuario"
                 required
             >
 
@@ -209,6 +216,7 @@
                 type="password"
                 name="password"
                 minlength="8"
+                placeholder="Contraseña"
                 required
             >
 
@@ -221,6 +229,7 @@
                 type="password"
                 name="password_confirm"
                 minlength="8"
+                placeholder="Repetir Contraseña"
                 required
             >
 

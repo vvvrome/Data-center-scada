@@ -157,7 +157,14 @@
 
 <script>
 
+function escapeHtml(value) {
+    const div = document.createElement("div");
+    div.textContent = String(value ?? "");
+    return div.innerHTML;
+}
+
 let selectedRack = null;
+
 
 function renderRackTabs(racks) {
 
@@ -290,7 +297,7 @@ async function updateDashboard() {
                 <div class="rack-header">
 
                     <div>
-                        <h3>${rack.name}</h3>
+                        <h3>${escapeHtml(rack.name)}</h3>
 
                         <span>
                             ${rack.used_units}U used /
@@ -349,21 +356,21 @@ async function updateDashboard() {
                     <div class="server-header">
 
                     <div>
-                        <strong>${server.name}</strong>
+                        <strong>${escapeHtml(server.name)}</strong>
 
                         <span class="server-type">
                             ${server.type}
                         </span>
                         <span class="network-connection">
-                            ${server.switch} · PORT ${server.switch_port}
+                            ${escapeHtml(server.switch)} · PORT ${server.switch_port}
                         </span>
                         <span class="server-status ${statusClass}">
                             <span class="status-dot"></span>
-                            ${server.status}
+                            ${escapeHtml(server.status)}
                         </span>
                     </div>                        
                         <span class="${statusClass}">
-                            ${server.temperature.toFixed(1)} °C
+                            ${Number(server.temperature).toFixed(1)} °C
                         </span>
 
                     </div>
@@ -375,7 +382,7 @@ async function updateDashboard() {
 
                             <div class="metric-header">
                                 <span>CPU</span>
-                                <span>${server.cpu.toFixed(0)}%</span>
+                                <span>${Number(server.cpu).toFixed(0)}%</span>
                             </div>
 
                             <div class="progress">
@@ -392,7 +399,7 @@ async function updateDashboard() {
 
                             <div class="metric-header">
                                 <span>RAM</span>
-                                <span>${server.ram.toFixed(0)}%</span>
+                                <span>${Number(server.ram).toFixed(0)}%</span>
                             </div>
 
                             <div class="progress">
@@ -409,7 +416,7 @@ async function updateDashboard() {
 
                             <div class="metric-header">
                                 <span>NETWORK</span>
-                                <span>${server.network.toFixed(0)}%</span>
+                                <span>${Number(server.network).toFixed(0)}%</span>
                             </div>
 
                             <div class="progress">
@@ -427,14 +434,14 @@ async function updateDashboard() {
                             <span>
                                 POWER
                                 <strong>
-                                    ${server.power.toFixed(0)} W
+                                    ${Number(server.power).toFixed(0)} W
                                 </strong>
                             </span>
 
                             <span>
                                 TEMP
                                 <strong>
-                                    ${server.temperature.toFixed(1)} °C
+                                    ${Number(server.temperature).toFixed(1)} °C
                                 </strong>
                             </span>
 
@@ -497,21 +504,21 @@ async function updateDashboard() {
                         <span>
                             TRAFFIC
                             <strong>
-                                ${switchDevice.traffic.toFixed(0)}%
+                                ${Number(switchDevice.traffic).toFixed(0)}%
                             </strong>
                         </span>
 
                         <span>
                             TEMPERATURE
                             <strong>
-                                ${switchDevice.temperature.toFixed(1)} °C
+                                ${Number(switchDevice.temperature).toFixed(1)} °C
                             </strong>
                         </span>
 
                         <span>
                             POWER
                             <strong>
-                                ${switchDevice.power.toFixed(0)} W
+                                ${Number(switchDevice.power).toFixed(0)} W
                             </strong>
                         </span>
 
@@ -534,7 +541,7 @@ async function updateDashboard() {
                                     <strong class="port-status ${port.status.toLowerCase()}">
                                         ${port.status}
                                         ·
-                                        ${port.usage.toFixed(0)}%
+                                        ${Number(port.usage).toFixed(0)}%
                                     </strong>
 
                                 </div>
@@ -604,21 +611,21 @@ async function updateDashboard() {
                         <span>
                             TRAFFIC
                             <strong>
-                                ${routerDevice.traffic.toFixed(0)}%
+                                ${Number(routerDevice.traffic).toFixed(0)}%
                             </strong>
                         </span>
 
                         <span>
                             TEMPERATURE
                             <strong>
-                                ${routerDevice.temperature.toFixed(1)} °C
+                                ${Number(routerDevice.temperature).toFixed(1)} °C
                             </strong>
                         </span>
 
                         <span>
                             POWER
                             <strong>
-                                ${routerDevice.power.toFixed(0)} W
+                                ${Number(routerDevice.power).toFixed(0)} W
                             </strong>
                         </span>
 
@@ -642,7 +649,7 @@ async function updateDashboard() {
                                     <strong class="port-status ${port.status.toLowerCase()}">
                                         ${port.status}
                                         ·
-                                        ${port.usage.toFixed(0)}%
+                                        ${Number(port.usage).toFixed(0)}%
                                     </strong>
 
                                 </div>
@@ -857,7 +864,7 @@ async function updateAlerts() {
                 details += `
                     <span>
                         PORT:
-                        ${alert.port}
+                        ${escapeHtml(alert.port)}
                     </span>
                 `;
 
@@ -885,7 +892,7 @@ async function updateAlerts() {
                 details += `
                     <span>
                         Device:
-                        ${alert.device}
+                        ${escapeHtml(alert.device)}
                     </span>
                 `;
 
@@ -901,11 +908,11 @@ async function updateAlerts() {
                     <div class="alert-header">
 
                         <strong>
-                            ${alert.severity}
+                            ${escapeHtml(alert.severity)}
                         </strong>
 
                         <span>
-                            ${alert.timestamp}
+                            ${escapeHtml(alert.timestamp)}
                         </span>
 
                     </div>
@@ -913,7 +920,7 @@ async function updateAlerts() {
 
                     <div class="alert-message">
 
-                        ${alert.message}
+                        ${escapeHTML(alert.message)}
 
                     </div>
 
@@ -1039,11 +1046,11 @@ async function updateSecurityEvents() {
                         <div class="security-event-header">
 
                             <strong>
-                                ${event.type}
+                                ${escapeHtml(event.type)}
                             </strong>
 
                             <span>
-                                ${event.timestamp}
+                                ${escapeHTML(event.timestamp)}
                             </span>
 
                         </div>
@@ -1051,7 +1058,7 @@ async function updateSecurityEvents() {
 
                         <div class="security-event-message">
 
-                            ${event.message}
+                            ${escapeHTML(event.message)}
 
                         </div>
 
@@ -1060,37 +1067,37 @@ async function updateSecurityEvents() {
 
                             <span>
                                 Source:
-                                ${event.source}
+                                ${escapeHTML(event.source)}
                             </span>
 
                             <span>
                                 Zone:
-                                ${event.source_zone}
+                                ${escapeHTML(event.source_zone)}
                             </span>
 
                             <span>
                                 Destination:
-                                ${event.destination}
+                                ${escapeHTML(event.destination)}
                             </span>
 
                             <span>
                                 Zone:
-                                ${event.destination_zone}
+                                ${escapeHTML(event.destination_zone)}
                             </span>
 
                             <span>
                                 Protocol:
-                                ${event.protocol}
+                                ${escapeHTML(event.protocol)}
                             </span>
 
                             <span>
                                 Port:
-                                ${event.port}
+                                ${escapeHTML(event.port)}
                             </span>
 
                             <span>
                                 Action:
-                                ${event.action}
+                                ${escapeHTML(event.action)}
                             </span>
 
                         </div>

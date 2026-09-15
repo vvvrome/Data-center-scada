@@ -16,6 +16,12 @@ Simulación orbital 3D | Python Graph Lab
 
 <form method="POST">
 
+    <input
+    type="hidden"
+    name="csrf_token"
+    value="{{ csrf_token() }}"
+    >
+
     <h3>Constantes y masas</h3>
 
     <label for="G">
@@ -174,7 +180,7 @@ Simulación orbital 3D | Python Graph Lab
         name="pasos"
         value="5000"
         min="1"
-        max="100000"
+        max="20000"
         required
     >
 

@@ -9,7 +9,7 @@ from flask import (
 
 import numpy as np
 import matplotlib.pyplot as plt
-
+import os
 from functools import wraps
 
 from database.users import get_user_by_username
@@ -19,7 +19,12 @@ from .expression_parser import (
     evaluar_funcion,
     ExpressionSecurityError
 )
-
+from .security import (
+    convertir_datos,
+    validar_texto,
+    MAX_FUNCTION_LENGTH,
+    MAX_ORBITAL_STEPS
+)
 
 # =========================================================
 # BLUEPRINT
@@ -94,21 +99,17 @@ def datos():
     if request.method == "POST":
 
         try:
+            x = np.array(
+                convertir_datos(
+                    request.form.get("x", "")
+                )
+            )
 
-            x_texto = request.form.get("x", "")
-            y_texto = request.form.get("y", "")
-
-            x = np.array([
-                float(valor.strip())
-                for valor in x_texto.split(",")
-                if valor.strip()
-            ])
-
-            y = np.array([
-                float(valor.strip())
-                for valor in y_texto.split(",")
-                if valor.strip()
-            ])
+            y = np.array(
+                convertir_datos(
+                    request.form.get("y", "")
+                )
+            )
 
             if x.size != y.size:
                 raise ValueError(
@@ -120,19 +121,28 @@ def datos():
                     "Debes introducir datos."
                 )
 
-            titulo = request.form.get(
-                "titulo",
-                "Gráfica"
+            titulo = validar_texto(
+                request.form.get(
+                    "titulo",
+                    "Gráfica"
+                ),
+                100
             )
 
-            nombre_x = request.form.get(
-                "nombre_x",
-                "X"
+            nombre_x = validar_texto(
+                request.form.get(
+                    "nombre_x",
+                    "X"
+                ),
+                50
             )
 
-            nombre_y = request.form.get(
-                "nombre_y",
-                "Y"
+            nombre_y = validar_texto(
+                request.form.get(
+                    "nombre_y",
+                    "Y"
+                ),
+                50
             )
 
             fig, ax = preparar_grafica(
@@ -217,17 +227,17 @@ def tipos():
             x_texto = request.form.get("x", "")
             y_texto = request.form.get("y", "")
 
-            x = np.array([
-                float(valor.strip())
-                for valor in x_texto.split(",")
-                if valor.strip()
-            ])
+            x = np.array(
+                convertir_datos(
+                    request.form.get("x", "")
+                )
+            )
 
-            y = np.array([
-                float(valor.strip())
-                for valor in y_texto.split(",")
-                if valor.strip()
-            ])
+            y = np.array(
+                convertir_datos(
+                    request.form.get("y", "")
+                )
+            )
 
             if x.size != y.size:
                 raise ValueError(
@@ -238,6 +248,16 @@ def tipos():
                 "tipo",
                 "linea"
             )
+
+            if tipo not in {
+                "linea",
+                "scatter",
+                "barras"
+            }:
+
+                raise ValueError(
+                    "Tipo de gráfica no válido."
+                )
 
             titulo = request.form.get(
                 "titulo",
@@ -295,7 +315,11 @@ def tipos():
 
             ax.legend()
 
-            ruta = "API/static/grafica_tipos.png"
+            ruta = os.path.join(
+                graph_bp.root_path,
+                "static",
+                "grafica_tipos.png"
+            )
 
             fig.savefig(
                 ruta,
@@ -306,22 +330,8 @@ def tipos():
             plt.close(fig)
 
             grafica = "grafica_tipos.png"
-            ruta = "API/static/grafica_tipos.png"
 
-            plt.savefig(
-                ruta,
-                bbox_inches="tight"
-            )
-
-            plt.close()
-
-            grafica = "grafica_tipos.png"
-
-            audit_graph(
-                "GRAPH_CREATED",
-                "SUCCESS",
-                f"Tipo={tipo}, puntos={x.size}"
-            )
+#            audit_graph(               "GRAPH_CREATED",                "SUCCESS",                f"Tipo={tipo}, puntos={x.size}"           )
 
         except ValueError as e:
 
@@ -407,7 +417,7 @@ def funciones():
                 error="Debes introducir una función."
             )
 
-        if puntos < 2 or puntos > 100000:
+        if puntos < 2 or puntos > 20000:
 
             audit_graph(
                 "INPUT_LIMIT_EXCEEDED",
@@ -419,10 +429,25 @@ def funciones():
                 "funciones.html",
                 error=(
                     "El número de puntos debe estar "
-                    "entre 2 y 100000."
+                    "entre 2 y 20000."
                 )
             )
 
+        if len(funcion) > 200:
+
+            audit_graph(
+                "INPUT_LIMIT_EXCEEDED",
+                "BLOCKED",
+                "Función demasiado larga"
+            )
+
+            return render_template(
+                "funciones.html",
+                error=(
+                    "La función es demasiado larga."
+                )
+            )
+        
         if inicio >= fin:
 
             return render_template(
@@ -595,17 +620,17 @@ def series():
                     f"Serie {i}"
                 )
 
-                x = np.array([
-                    float(valor.strip())
-                    for valor in x_texto.split(",")
-                    if valor.strip()
-                ])
+                x = np.array(
+                    convertir_datos(
+                        x_texto
+                    )
+                )
 
-                y = np.array([
-                    float(valor.strip())
-                    for valor in y_texto.split(",")
-                    if valor.strip()
-                ])
+                y = np.array(
+                    convertir_datos(
+                        y_texto
+                    )
+                )
 
                 if x.size != y.size:
 
@@ -687,17 +712,17 @@ def analisis():
                 ""
             )
 
-            x = np.array([
-                float(valor.strip())
-                for valor in x_texto.split(",")
-                if valor.strip()
-            ])
+            x = np.array(
+                convertir_datos(
+                    x_texto
+                )
+            )
 
-            y = np.array([
-                float(valor.strip())
-                for valor in y_texto.split(",")
-                if valor.strip()
-            ])
+            y = np.array(
+                convertir_datos(
+                    y_texto
+                )
+            )
 
             if x.size != y.size:
 
@@ -854,9 +879,18 @@ def orbital():
                     "Los pasos deben ser mayores que 0."
                 )
 
-            if pasos > 100000:
-                raise ValueError(
-                    "El máximo es de 100000 pasos."
+            if pasos > 20000:
+                audit_graph(
+                    "INPUT_LIMIT_EXCEEDED",
+                    "BLOCKED",
+                        f"pasos={pasos}"
+                )
+
+                return render_template(
+                    "orbital.html",
+                    error=(
+                        "El máximo es de 20000 pasos."
+                    )
                 )
 
             posiciones_x = []
