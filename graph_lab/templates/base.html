@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+        Python Graph Lab
+        {% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('graph.static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <header>
+
+        <nav class="navbar">
+
+            <div class="navbar-brand">
+
+                <a href="{{ url_for('index') }}">
+                    Python Graph Lab
+                </a>
+
+            </div>
+
+
+            <div class="navbar-links">
+
+                <a href="{{ url_for('index') }}">
+                    Inicio
+                </a>
+
+                <a href="{{ url_for('plant_page') }}">
+                    Planta
+                </a>
+
+                <a href="{{ url_for('graph.graph_index') }}">
+                    Datos
+                </a>
+            </div>
+
+
+            <div class="navbar-user">
+
+                {% if session.get("username") %}
+
+                    <span>
+                        {{ session.get("username") }}
+                    </span>
+
+                    <a
+                        class="logout-button"
+                        href="{{ url_for('logout') }}"
+                    >
+                        Cerrar sesión
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <main class="container">
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            Data Center Lab · Python Graph Lab
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

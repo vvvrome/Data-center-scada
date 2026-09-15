@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}
+Datos | Python Graph Lab
+{% endblock %}
+
+{% block content %}
+
+<h2>Gráfica a partir de datos</h2>
+
+<p>
+    Introduce tus valores X e Y para generar una gráfica.
+</p>
+
+
+<form method="POST">
+
+    <label for="x">Valores X</label>
+
+    <input
+        type="text"
+        id="x"
+        name="x"
+        placeholder="1, 2, 3, 4, 5"
+        required
+    >
+
+
+    <label for="y">Valores Y</label>
+
+    <input
+        type="text"
+        id="y"
+        name="y"
+        placeholder="2, 4, 6, 8, 10"
+        required
+    >
+
+
+    <label for="titulo">Título</label>
+
+    <input
+        type="text"
+        id="titulo"
+        name="titulo"
+        placeholder="Mi gráfica"
+        value="Mi gráfica"
+    >
+
+
+    <label for="nombre_x">Nombre del eje X</label>
+
+    <input
+        type="text"
+        id="nombre_x"
+        name="nombre_x"
+        placeholder="X"
+        value="X"
+    >
+
+
+    <label for="nombre_y">Nombre del eje Y</label>
+
+    <input
+        type="text"
+        id="nombre_y"
+        name="nombre_y"
+        placeholder="Y"
+        value="Y"
+    >
+
+
+    <button type="submit">
+        Generar gráfica
+    </button>
+
+</form>
+
+
+{% if error %}
+
+<div class="error">
+    {{ error }}
+</div>
+
+{% endif %}
+
+
+{% if grafica %}
+
+<div class="resultado">
+
+    <h2>Resultado</h2>
+
+    <img
+        src="{{ url_for('static', filename=grafica) }}"
+        alt="Gráfica generada"
+    >
+
+</div>
+
+{% endif %}
+
+{% endblock %}

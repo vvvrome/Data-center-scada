@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block title %}
+Varias series | Python Graph Lab
+{% endblock %}
+
+{% block content %}
+
+<h2>Varias series</h2>
+
+<p>
+    Representa varias series de datos en una misma gráfica.
+</p>
+
+
+<form method="POST">
+
+    <input
+        type="hidden"
+        name="numero_series"
+        value="3"
+    >
+
+
+    <!-- SERIE 1 -->
+
+    <h3>Serie 1</h3>
+
+    <label for="nombre1">
+        Nombre
+    </label>
+
+    <input
+        type="text"
+        id="nombre1"
+        name="nombre1"
+        value="Serie 1"
+    >
+
+    <label for="x1">
+        Valores X
+    </label>
+
+    <input
+        type="text"
+        id="x1"
+        name="x1"
+        placeholder="1,2,3,4,5"
+        required
+    >
+
+    <label for="y1">
+        Valores Y
+    </label>
+
+    <input
+        type="text"
+        id="y1"
+        name="y1"
+        placeholder="2,4,6,8,10"
+        required
+    >
+
+
+    <!-- SERIE 2 -->
+
+    <h3>Serie 2</h3>
+
+    <label for="nombre2">
+        Nombre
+    </label>
+
+    <input
+        type="text"
+        id="nombre2"
+        name="nombre2"
+        value="Serie 2"
+    >
+
+    <label for="x2">
+        Valores X
+    </label>
+
+    <input
+        type="text"
+        id="x2"
+        name="x2"
+        placeholder="1,2,3,4,5"
+        required
+    >
+
+    <label for="y2">
+        Valores Y
+    </label>
+
+    <input
+        type="text"
+        id="y2"
+        name="y2"
+        placeholder="1,4,9,16,25"
+        required
+    >
+
+
+    <!-- SERIE 3 -->
+
+    <h3>Serie 3</h3>
+
+    <label for="nombre3">
+        Nombre
+    </label>
+
+    <input
+        type="text"
+        id="nombre3"
+        name="nombre3"
+        value="Serie 3"
+    >
+
+    <label for="x3">
+        Valores X
+    </label>
+
+    <input
+        type="text"
+        id="x3"
+        name="x3"
+        placeholder="1,2,3,4,5"
+        required
+    >
+
+    <label for="y3">
+        Valores Y
+    </label>
+
+    <input
+        type="text"
+        id="y3"
+        name="y3"
+        placeholder="1,8,27,64,125"
+        required
+    >
+
+
+    <!-- OPCIONES -->
+
+    <h3>Configuración</h3>
+
+    <label for="titulo">
+        Título
+    </label>
+
+    <input
+        type="text"
+        id="titulo"
+        name="titulo"
+        value="Comparación de series"
+    >
+
+
+    <label for="nombre_x">
+        Nombre del eje X
+    </label>
+
+    <input
+        type="text"
+        id="nombre_x"
+        name="nombre_x"
+        value="X"
+    >
+
+
+    <label for="nombre_y">
+        Nombre del eje Y
+    </label>
+
+    <input
+        type="text"
+        id="nombre_y"
+        name="nombre_y"
+        value="Y"
+    >
+
+
+    <button type="submit">
+        Generar gráfica
+    </button>
+
+</form>
+
+
+{% if error %}
+
+<div class="error">
+    {{ error }}
+</div>
+
+{% endif %}
+
+
+{% if grafica %}
+
+<div class="resultado">
+
+    <h2>Resultado</h2>
+
+    <img
+        src="{{ url_for('static', filename=grafica) }}"
+        alt="Gráfica de varias series"
+    >
+
+</div>
+
+{% endif %}
+
+{% endblock %}

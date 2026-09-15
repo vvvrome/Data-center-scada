@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}
+Graph Lab
+{% endblock %}
+
+{% block content %}
+
+<section class="graph-home">
+
+    <div class="graph-header">
+
+        <span class="graph-badge">
+            PYTHON
+        </span>
+
+        <h1>
+            Python Graph Lab
+        </h1>
+
+        <p>
+            Herramientas para representación,
+            análisis y simulación de datos mediante Python.
+        </p>
+
+    </div>
+
+
+    <div class="graph-grid">
+
+
+        <a
+            href="{{ url_for('graph.datos') }}"
+            class="graph-card"
+        >
+
+            <div class="graph-card-icon">
+                📊
+            </div>
+
+            <h2>
+                Datos
+            </h2>
+
+            <p>
+                Genera gráficas a partir de
+                valores X e Y.
+            </p>
+
+            <span>
+                Abrir →
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('graph.tipos') }}"
+            class="graph-card"
+        >
+
+            <div class="graph-card-icon">
+                📈
+            </div>
+
+            <h2>
+                Tipos de gráfica
+            </h2>
+
+            <p>
+                Compara gráficas de líneas,
+                dispersión y barras.
+            </p>
+
+            <span>
+                Abrir →
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('graph.funciones') }}"
+            class="graph-card"
+        >
+
+            <div class="graph-card-icon">
+                ƒ(x)
+            </div>
+
+            <h2>
+                Funciones
+            </h2>
+
+            <p>
+                Representa funciones matemáticas
+                utilizando NumPy.
+            </p>
+
+            <span>
+                Abrir →
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('graph.series') }}"
+            class="graph-card"
+        >
+
+            <div class="graph-card-icon">
+                ≋
+            </div>
+
+            <h2>
+                Varias series
+            </h2>
+
+            <p>
+                Representa y compara
+                varias series de datos.
+            </p>
+
+            <span>
+                Abrir →
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('graph.analisis') }}"
+            class="graph-card"
+        >
+
+            <div class="graph-card-icon">
+                ∑
+            </div>
+
+            <h2>
+                Análisis
+            </h2>
+
+            <p>
+                Calcula derivadas, integrales,
+                máximos, mínimos y estadísticas.
+            </p>
+
+            <span>
+                Abrir →
+            </span>
+
+        </a>
+
+
+        <a
+            href="{{ url_for('graph.orbital') }}"
+            class="graph-card"
+        >
+
+            <div class="graph-card-icon">
+                ◉
+            </div>
+
+            <h2>
+                Órbita 3D
+            </h2>
+
+            <p>
+                Simula una trayectoria orbital
+                interactiva en tres dimensiones.
+            </p>
+
+            <span>
+                Abrir →
+            </span>
+
+        </a>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

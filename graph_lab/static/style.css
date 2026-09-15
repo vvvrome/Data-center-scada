@@ -1,0 +1,806 @@
+/* =========================================================
+   RESET Y GENERAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+
+    font-family:
+        "Segoe UI",
+        Inter,
+        Arial,
+        sans-serif;
+
+    background: #0b1120;
+
+    color: #e2e8f0;
+
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.navbar {
+    min-height: 68px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 25px;
+
+    padding: 12px 30px;
+
+    background: #111827;
+
+    border-bottom: 1px solid #1e293b;
+
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.25);
+
+    position: sticky;
+    top: 0;
+
+    z-index: 1000;
+}
+
+
+.navbar-brand {
+    white-space: nowrap;
+}
+
+
+.navbar-brand a {
+    color: #f8fafc;
+
+    text-decoration: none;
+
+    font-size: 18px;
+
+    font-weight: 700;
+}
+
+
+.navbar-links {
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    flex: 1;
+
+    flex-wrap: wrap;
+}
+
+
+.navbar-links a {
+    color: #94a3b8;
+
+    text-decoration: none;
+
+    padding: 8px 11px;
+
+    border-radius: 7px;
+
+    font-size: 14px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.navbar-links a:hover {
+    background: #1e293b;
+
+    color: #f8fafc;
+}
+
+
+.navbar-user {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    white-space: nowrap;
+}
+
+
+.navbar-user span {
+    color: #94a3b8;
+
+    font-size: 14px;
+}
+
+
+.logout-button {
+    padding: 8px 13px;
+
+    border-radius: 7px;
+
+    background: #1e293b;
+
+    color: #e2e8f0 !important;
+
+    text-decoration: none;
+
+    font-size: 13px;
+}
+
+
+.logout-button:hover {
+    background: #334155;
+}
+
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+.container {
+    width: min(1100px, calc(100% - 40px));
+
+    margin: 40px auto;
+
+    min-height: calc(100vh - 180px);
+}
+
+
+/* =========================================================
+   TITULOS
+   ========================================================= */
+
+h1 {
+    margin-top: 0;
+
+    color: #f8fafc;
+
+    font-size: 30px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.5px;
+}
+
+
+h2 {
+    color: #f1f5f9;
+
+    font-size: 22px;
+
+    margin-top: 0;
+}
+
+
+h3 {
+    color: #e2e8f0;
+
+    font-size: 16px;
+}
+
+
+p {
+    color: #94a3b8;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   FORMULARIOS
+   ========================================================= */
+
+form {
+    margin-top: 25px;
+
+    padding: 28px;
+
+    background: #111827;
+
+    border: 1px solid #1e293b;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.20);
+}
+
+
+label {
+    display: block;
+
+    margin-top: 18px;
+
+    margin-bottom: 7px;
+
+    color: #cbd5e1;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+
+input,
+select,
+textarea {
+    width: 100%;
+
+    padding: 11px 13px;
+
+    background: #0f172a;
+
+    color: #e2e8f0;
+
+    border: 1px solid #334155;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+input::placeholder,
+textarea::placeholder {
+    color: #64748b;
+}
+
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #60a5fa;
+
+    box-shadow:
+        0 0 0 3px rgba(96, 165, 250, 0.12);
+}
+
+
+textarea {
+    resize: vertical;
+
+    min-height: 100px;
+}
+
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+button {
+    width: 100%;
+
+    margin-top: 22px;
+
+    padding: 12px 18px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease;
+}
+
+
+button:hover {
+    background: #1d4ed8;
+
+    transform: translateY(-1px);
+}
+
+
+button:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   RESULTADOS
+   ========================================================= */
+
+.resultado,
+.resultados,
+.analisis-resultados {
+    margin-top: 30px;
+
+    padding: 25px;
+
+    background: #111827;
+
+    border: 1px solid #1e293b;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+
+.resultado-card {
+    padding: 18px;
+
+    margin-bottom: 12px;
+
+    background: #0f172a;
+
+    border: 1px solid #1e293b;
+
+    border-radius: 10px;
+}
+
+
+.resultado-card:last-child {
+    margin-bottom: 0;
+}
+
+
+.resultado-card h3 {
+    margin-top: 0;
+
+    margin-bottom: 8px;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+.resultado-card p {
+    margin: 0;
+
+    color: #f8fafc;
+
+    font-size: 20px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   CONTENEDOR DE GRÁFICA
+   ========================================================= */
+
+.grafica-container {
+    margin-top: 30px;
+
+    padding: 24px;
+
+    background: #111827;
+
+    border: 1px solid #1e293b;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.20);
+
+    overflow: hidden;
+}
+
+
+.grafica-container h2 {
+    margin-bottom: 20px;
+}
+
+
+/* =========================================================
+   IMÁGENES MATPLOTLIB
+   ========================================================= */
+
+.grafica-container img {
+    display: block;
+
+    width: 100%;
+
+    height: auto;
+
+    border-radius: 9px;
+}
+
+
+/* =========================================================
+   ÓRBITA 3D
+   ========================================================= */
+
+#grafica-3d {
+    width: 100%;
+
+    min-height: 650px;
+
+    margin-top: 25px;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    border: 1px solid #1e293b;
+}
+
+
+.controles-orbita {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+
+.controles-orbita button {
+    width: auto;
+
+    margin-top: 0;
+
+    padding: 10px 18px;
+}
+
+
+/* =========================================================
+   INFORMACIÓN / EJEMPLOS
+   ========================================================= */
+
+ul {
+    color: #94a3b8;
+
+    line-height: 1.8;
+}
+
+
+li {
+    margin-bottom: 3px;
+}
+
+
+code {
+    padding: 3px 6px;
+
+    background: #0f172a;
+
+    border: 1px solid #1e293b;
+
+    border-radius: 5px;
+
+    color: #cbd5e1;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+}
+
+
+/* =========================================================
+   ERRORES
+   ========================================================= */
+
+.error {
+    margin-top: 18px;
+
+    padding: 13px 16px;
+
+    background: rgba(127, 29, 29, 0.30);
+
+    border: 1px solid #7f1d1d;
+
+    border-radius: 8px;
+
+    color: #fecaca;
+}
+
+
+/* =========================================================
+   SEPARADORES
+   ========================================================= */
+
+hr {
+    border: 0;
+
+    border-top: 1px solid #1e293b;
+
+    margin: 30px 0;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+    margin-top: 50px;
+
+    padding: 25px;
+
+    text-align: center;
+
+    border-top: 1px solid #1e293b;
+}
+
+
+footer p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .navbar {
+        flex-direction: column;
+
+        align-items: stretch;
+
+        padding: 15px 20px;
+    }
+
+
+    .navbar-links {
+        justify-content: center;
+    }
+
+
+    .navbar-user {
+        justify-content: center;
+    }
+
+
+    .container {
+        width: calc(100% - 24px);
+
+        margin-top: 24px;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    h1 {
+        font-size: 24px;
+    }
+
+
+    form,
+    .resultado,
+    .resultados,
+    .grafica-container {
+        padding: 18px;
+    }
+
+
+    .navbar-links a {
+        font-size: 13px;
+
+        padding: 7px 8px;
+    }
+}
+
+/* =========================================================
+   GRAPH LAB - PAGINA PRINCIPAL
+   ========================================================= */
+
+.graph-home {
+    padding: 20px 0 50px;
+}
+
+
+.graph-header {
+    text-align: center;
+
+    max-width: 750px;
+
+    margin: 20px auto 45px;
+}
+
+
+.graph-header h1 {
+    font-size: 38px;
+
+    margin: 12px 0;
+
+    letter-spacing: -1px;
+}
+
+
+.graph-header p {
+    font-size: 16px;
+
+    color: #94a3b8;
+
+    margin: 0;
+}
+
+
+.graph-badge {
+    display: inline-block;
+
+    padding: 6px 12px;
+
+    border: 1px solid #334155;
+
+    border-radius: 20px;
+
+    background: #0f172a;
+
+    color: #60a5fa;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+
+/* GRID */
+
+.graph-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+
+/* TARJETAS */
+
+.graph-card {
+    display: block;
+
+    padding: 25px;
+
+    min-height: 220px;
+
+    background: #111827;
+
+    border: 1px solid #1e293b;
+
+    border-radius: 14px;
+
+    text-decoration: none;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.graph-card:hover {
+    transform: translateY(-4px);
+
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+
+.graph-card-icon {
+    width: 45px;
+
+    height: 45px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 18px;
+
+    background: #0f172a;
+
+    border: 1px solid #1e293b;
+
+    border-radius: 10px;
+
+    color: #60a5fa;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+
+.graph-card h2 {
+    margin: 0 0 10px;
+
+    color: #f8fafc;
+
+    font-size: 19px;
+}
+
+
+.graph-card p {
+    margin: 0 0 20px;
+
+    color: #94a3b8;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+.graph-card span {
+    color: #60a5fa;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+
+    .graph-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .graph-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+    .graph-header h1 {
+        font-size: 30px;
+    }
+
+}

@@ -1,0 +1,764 @@
+{% extends "base.html" %}
+
+{% block title %}
+Simulación orbital 3D | Python Graph Lab
+{% endblock %}
+
+{% block content %}
+
+<h2>Simulación orbital 3D</h2>
+
+<p>
+    Simula el movimiento de un planeta en tres dimensiones
+    bajo la acción de la gravedad.
+</p>
+
+
+<form method="POST">
+
+    <h3>Constantes y masas</h3>
+
+    <label for="G">
+        Constante gravitatoria G
+    </label>
+
+    <input
+        type="number"
+        id="G"
+        name="G"
+        value="1"
+        step="any"
+        required
+    >
+
+
+    <label for="M">
+        Masa del cuerpo central
+    </label>
+
+    <input
+        type="number"
+        id="M"
+        name="M"
+        value="100"
+        step="any"
+        required
+    >
+
+
+    <label for="m">
+        Masa del planeta
+    </label>
+
+    <input
+        type="number"
+        id="m"
+        name="m"
+        value="1"
+        step="any"
+        required
+    >
+
+
+    <h3>Posición inicial</h3>
+
+    <label for="x">
+        X
+    </label>
+
+    <input
+        type="number"
+        id="x"
+        name="x"
+        value="10"
+        step="any"
+        required
+    >
+
+
+    <label for="y">
+        Y
+    </label>
+
+    <input
+        type="number"
+        id="y"
+        name="y"
+        value="0"
+        step="any"
+        required
+    >
+
+
+    <label for="z">
+        Z
+    </label>
+
+    <input
+        type="number"
+        id="z"
+        name="z"
+        value="0"
+        step="any"
+        required
+    >
+
+
+    <h3>Velocidad inicial</h3>
+
+    <label for="vx">
+        Vx
+    </label>
+
+    <input
+        type="number"
+        id="vx"
+        name="vx"
+        value="0"
+        step="any"
+        required
+    >
+
+
+    <label for="vy">
+        Vy
+    </label>
+
+    <input
+        type="number"
+        id="vy"
+        name="vy"
+        value="3.162"
+        step="any"
+        required
+    >
+
+
+    <label for="vz">
+        Vz
+    </label>
+
+    <input
+        type="number"
+        id="vz"
+        name="vz"
+        value="0"
+        step="any"
+        required
+    >
+
+
+    <h3>Simulación</h3>
+
+    <label for="dt">
+        Paso temporal dt
+    </label>
+
+    <input
+        type="number"
+        id="dt"
+        name="dt"
+        value="0.01"
+        step="any"
+        required
+    >
+
+
+    <label for="pasos">
+        Número de pasos
+    </label>
+
+    <input
+        type="number"
+        id="pasos"
+        name="pasos"
+        value="5000"
+        min="1"
+        max="100000"
+        required
+    >
+
+
+    <button type="submit">
+        Ejecutar simulación
+    </button>
+
+</form>
+
+
+{% if error %}
+
+<div class="error">
+
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+
+{% if trayectoria %}
+
+<div class="resultado">
+
+    <h2>Trayectoria 3D</h2>
+
+    <div id="grafica-3d"></div>
+
+</div>
+
+<script id="trayectoria-data" type="application/json">
+    {{ trayectoria | tojson }}
+</script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+<script>
+
+    // ==========================================
+    // DATOS DE LA SIMULACIÓN
+    // ==========================================
+
+    const trayectoria = JSON.parse(
+        document.getElementById(
+            "trayectoria-data"
+        ).textContent
+    );
+
+
+    // ==========================================
+    // TRAYECTORIA COMPLETA
+    // ==========================================
+
+    const trayectoriaCompleta = {
+
+        x: trayectoria.x,
+        y: trayectoria.y,
+        z: trayectoria.z,
+
+        mode: "lines",
+
+        type: "scatter3d",
+
+        name: "Trayectoria",
+
+        line: {
+            width: 4
+        }
+    };
+
+
+    // ==========================================
+    // CUERPO CENTRAL
+    // ==========================================
+
+    const cuerpoCentral = {
+
+        x: [0],
+        y: [0],
+        z: [0],
+
+        mode: "markers",
+
+        type: "scatter3d",
+
+        name: "Cuerpo central",
+
+        marker: {
+            size: 10
+        }
+    };
+
+
+    // ==========================================
+    // PLANETA
+    // ==========================================
+
+    const planeta = {
+
+        x: [trayectoria.x[0]],
+        y: [trayectoria.y[0]],
+        z: [trayectoria.z[0]],
+
+        mode: "markers",
+
+        type: "scatter3d",
+
+        name: "Planeta",
+
+        marker: {
+            size: 7
+        }
+    };
+
+
+    // ==========================================
+    // VECTOR DE VELOCIDAD
+    // ==========================================
+
+    const escalaVelocidad = 2;
+
+    const velocidad = {
+
+        type: "scatter3d",
+
+        mode: "lines",
+
+        name: "Velocidad",
+
+        x: [
+            trayectoria.x[0],
+            trayectoria.x[0] +
+                trayectoria.vx[0] *
+                escalaVelocidad
+        ],
+
+        y: [
+            trayectoria.y[0],
+            trayectoria.y[0] +
+                trayectoria.vy[0] *
+                escalaVelocidad
+        ],
+
+        z: [
+            trayectoria.z[0],
+            trayectoria.z[0] +
+                trayectoria.vz[0] *
+                escalaVelocidad
+        ],
+
+        line: {
+            width: 5
+        }
+    };
+
+
+    // ==========================================
+    // DATOS INICIALES
+    // ==========================================
+
+    const datosIniciales = [
+
+        cuerpoCentral,
+
+        planeta,
+
+        trayectoriaCompleta,
+
+        velocidad
+
+    ];
+
+
+    // ==========================================
+    // CONFIGURACIÓN DE LA GRÁFICA
+    // ==========================================
+
+    const layout = {
+
+        title: "Simulación orbital 3D",
+
+        dragmode: "orbit",
+
+        scene: {
+
+            xaxis: {
+                title: "X"
+            },
+
+            yaxis: {
+                title: "Y"
+            },
+
+            zaxis: {
+                title: "Z"
+            },
+
+            aspectmode: "data"
+        },
+
+        margin: {
+
+            l: 0,
+            r: 0,
+            b: 0,
+            t: 50
+        }
+    };
+
+
+    // ==========================================
+    // ESTADO DE LA ANIMACIÓN
+    // ==========================================
+
+    let indice = 0;
+
+    let animando = false;
+
+    let animationId = null;
+
+
+    // ==========================================
+    // CREAR GRÁFICA
+    // ==========================================
+
+    Plotly.newPlot(
+
+        "grafica-3d",
+
+        datosIniciales,
+
+        layout,
+
+        {
+            responsive: true,
+            scrollZoom: true
+        }
+
+    );
+
+
+    // ==========================================
+    // ACTUALIZAR PLANETA
+    // ==========================================
+
+    function actualizarPlaneta() {
+
+        if (!animando) {
+            return;
+        }
+
+
+        // Si llegamos al final,
+        // volvemos al principio
+
+        if (
+            indice >= trayectoria.x.length
+        ) {
+
+            indice = 0;
+
+        }
+
+
+        // ======================================
+        // ACTUALIZAR PLANETA
+        // ======================================
+
+        Plotly.restyle(
+
+            "grafica-3d",
+
+            {
+
+                x: [
+                    [trayectoria.x[indice]]
+                ],
+
+                y: [
+                    [trayectoria.y[indice]]
+                ],
+
+                z: [
+                    [trayectoria.z[indice]]
+                ]
+
+            },
+
+            [1]
+
+        );
+
+
+        // ======================================
+        // ACTUALIZAR VECTOR DE VELOCIDAD
+        // ======================================
+
+        Plotly.restyle(
+
+            "grafica-3d",
+
+            {
+
+                x: [[
+
+                    trayectoria.x[indice],
+
+                    trayectoria.x[indice] +
+                        trayectoria.vx[indice] *
+                        escalaVelocidad
+
+                ]],
+
+                y: [[
+
+                    trayectoria.y[indice],
+
+                    trayectoria.y[indice] +
+                        trayectoria.vy[indice] *
+                        escalaVelocidad
+
+                ]],
+
+                z: [[
+
+                    trayectoria.z[indice],
+
+                    trayectoria.z[indice] +
+                        trayectoria.vz[indice] *
+                        escalaVelocidad
+
+                ]]
+
+            },
+
+            [3]
+
+        );
+
+
+        // Siguiente posición
+
+        indice++;
+
+
+        // Continuar animación
+
+        animationId =
+            requestAnimationFrame(
+                actualizarPlaneta
+            );
+
+    }
+
+
+    // ==========================================
+    // REPRODUCIR
+    // ==========================================
+
+    function iniciarAnimacion() {
+
+        if (animando) {
+            return;
+        }
+
+        animando = true;
+
+        actualizarPlaneta();
+
+    }
+
+
+    // ==========================================
+    // PAUSAR
+    // ==========================================
+
+    function pausarAnimacion() {
+
+        animando = false;
+
+
+        if (
+            animationId !== null
+        ) {
+
+            cancelAnimationFrame(
+                animationId
+            );
+
+            animationId = null;
+
+        }
+
+    }
+
+
+    // ==========================================
+    // REINICIAR
+    // ==========================================
+
+    function reiniciarAnimacion() {
+
+        pausarAnimacion();
+
+        indice = 0;
+
+
+        // Volver a colocar el planeta
+        // en la posición inicial
+
+        Plotly.restyle(
+
+            "grafica-3d",
+
+            {
+
+                x: [
+                    [trayectoria.x[0]]
+                ],
+
+                y: [
+                    [trayectoria.y[0]]
+                ],
+
+                z: [
+                    [trayectoria.z[0]]
+                ]
+
+            },
+
+            [1]
+
+        );
+
+
+        // Volver a colocar el vector
+        // de velocidad
+
+        Plotly.restyle(
+
+            "grafica-3d",
+
+            {
+
+                x: [[
+
+                    trayectoria.x[0],
+
+                    trayectoria.x[0] +
+                        trayectoria.vx[0] *
+                        escalaVelocidad
+
+                ]],
+
+                y: [[
+
+                    trayectoria.y[0],
+
+                    trayectoria.y[0] +
+                        trayectoria.vy[0] *
+                        escalaVelocidad
+
+                ]],
+
+                z: [[
+
+                    trayectoria.z[0],
+
+                    trayectoria.z[0] +
+                        trayectoria.vz[0] *
+                        escalaVelocidad
+
+                ]]
+
+            },
+
+            [3]
+
+        );
+
+    }
+
+</script>
+
+{% endif %}
+
+
+{% if resultados %}
+
+<div class="analisis-resultados">
+
+    <div class="resultado-card">
+
+        <h3>Distancia final</h3>
+
+        <p>
+            {{ "%.6f"|format(
+                resultados.distancia_final
+            ) }}
+        </p>
+
+    </div>
+
+
+    <div class="resultado-card">
+
+        <h3>Velocidad final</h3>
+
+        <p>
+            {{ "%.6f"|format(
+                resultados.velocidad_final
+            ) }}
+        </p>
+
+    </div>
+
+
+    <div class="resultado-card">
+
+        <h3>Energía cinética</h3>
+
+        <p>
+            {{ "%.6f"|format(
+                resultados.energia_cinetica
+            ) }}
+        </p>
+
+    </div>
+
+
+    <div class="resultado-card">
+
+        <h3>Energía potencial</h3>
+
+        <p>
+            {{ "%.6f"|format(
+                resultados.energia_potencial
+            ) }}
+        </p>
+
+    </div>
+
+
+    <div class="resultado-card">
+
+        <h3>Energía total</h3>
+
+        <p>
+            {{ "%.6f"|format(
+                resultados.energia_total
+            ) }}
+        </p>
+
+    </div>
+
+</div>
+
+<div class="controles-orbita">
+
+    <button
+        type="button"
+        onclick="iniciarAnimacion()"
+    >
+        ▶ Reproducir
+    </button>
+
+    <button
+        type="button"
+        onclick="pausarAnimacion()"
+    >
+        ⏸ Pausar
+    </button>
+
+    <button
+        type="button"
+        onclick="reiniciarAnimacion()"
+    >
+        ⟳ Reiniciar
+    </button>
+
+</div>
+
+
+{% endif %}
+
+{% endblock %}

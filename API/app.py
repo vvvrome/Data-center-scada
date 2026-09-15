@@ -12,7 +12,7 @@ from flask import (
 )
 
 from functools import wraps
-
+from graph_lab.routes import graph_bp
 
 def create_app(
     datacenter,
@@ -25,6 +25,7 @@ def create_app(
     app = Flask(__name__)
     app.secret_key = os.environ.get("FLASK_SECRET_KEY")
     app.config["SESSION_PERMANENT"] = False
+    app.register_blueprint(graph_bp)
     from database.users import (
         authenticate_user,
         create_user,
@@ -124,6 +125,11 @@ def create_app(
                 "login.html",
                 error="Usuario o contraseña incorrectos"
             )
+
+        # Petición GET
+        return render_template(
+            "login.html"
+        )
     @app.route("/logout")
     def logout():
 

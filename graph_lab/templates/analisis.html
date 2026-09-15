@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}
+Análisis | Python Graph Lab
+{% endblock %}
+
+{% block content %}
+
+<h2>Análisis matemático</h2>
+
+<p>
+    Introduce datos X e Y para realizar diferentes análisis numéricos.
+</p>
+
+
+<form method="POST">
+
+    <label for="x">
+        Valores X
+    </label>
+
+    <input
+        type="text"
+        id="x"
+        name="x"
+        placeholder="0,1,2,3,4,5"
+        required
+    >
+
+
+    <label for="y">
+        Valores Y
+    </label>
+
+    <input
+        type="text"
+        id="y"
+        name="y"
+        placeholder="0,1,4,9,16,25"
+        required
+    >
+
+
+    <button type="submit">
+        Analizar
+    </button>
+
+</form>
+
+
+{% if error %}
+
+<div class="error">
+
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+
+{% if resultado %}
+
+<div class="analisis-resultados">
+
+    <h2>Resultados</h2>
+
+
+    <div class="resultado-card">
+
+        <h3>Integral</h3>
+
+        <p>
+            {{ "%.4f"|format(resultado.integral) }}
+        </p>
+
+    </div>
+
+
+    <div class="resultado-card">
+
+        <h3>Máximo</h3>
+
+        <p>
+            X = {{ "%.4f"|format(resultado.max_x) }}
+        </p>
+
+        <p>
+            Y = {{ "%.4f"|format(resultado.max_y) }}
+        </p>
+
+    </div>
+
+
+    <div class="resultado-card">
+
+        <h3>Mínimo</h3>
+
+        <p>
+            X = {{ "%.4f"|format(resultado.min_x) }}
+        </p>
+
+        <p>
+            Y = {{ "%.4f"|format(resultado.min_y) }}
+        </p>
+
+    </div>
+
+
+    <div class="resultado-card">
+
+        <h3>Media</h3>
+
+        <p>
+            {{ "%.4f"|format(resultado.media) }}
+        </p>
+
+    </div>
+
+
+    <div class="resultado-card">
+
+        <h3>Desviación estándar</h3>
+
+        <p>
+            {{ "%.4f"|format(resultado.desviacion) }}
+        </p>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+{% if grafica %}
+
+<div class="resultado">
+
+    <h2>Gráfica</h2>
+
+    <img
+        src="{{ url_for('static', filename=grafica) }}"
+        alt="Gráfica del análisis"
+    >
+
+</div>
+
+{% endif %}
+
+{% endblock %}

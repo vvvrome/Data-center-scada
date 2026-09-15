@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}
+Funciones | Python Graph Lab
+{% endblock %}
+
+{% block content %}
+
+<h2>Funciones matemáticas</h2>
+
+<p>
+    Introduce una función matemática y representa su gráfica.
+</p>
+
+
+<form method="POST">
+
+    <label for="funcion">
+        Función f(x):
+    </label>
+
+    <input
+        type="text"
+        id="funcion"
+        name="funcion"
+        placeholder="Ej: sin(x) + x**2"
+        required
+    >
+
+
+    <p>
+        Ejemplos:
+    </p>
+
+    <ul>
+        <li>x**2</li>
+        <li>sin(x)</li>
+        <li>cos(x)</li>
+        <li>exp(-x) * sin(x)</li>
+        <li>sqrt(x)</li>
+        <li>log(x)</li>
+    </ul>
+
+
+    <label for="inicio">Inicio:</label>
+    <input
+        type="number"
+        id="inicio"
+        name="inicio"
+        step="any"
+        required
+    >
+
+    <label for="fin">Fin:</label>
+    <input
+        type="number"
+        id="fin"
+        name="fin"
+        step="any"
+        required
+    >
+
+
+    <label for="puntos">
+        Número de puntos:
+    </label>
+    <input
+        type="number"
+        id="puntos"
+        name="puntos"
+        value="1000"
+        min="2"
+        max="100000"
+        required
+    >
+
+
+    <label for="titulo">
+        Título
+    </label>
+
+    <input
+        type="text"
+        id="titulo"
+        name="titulo"
+        value="Función matemática"
+    >
+
+
+    <label for="nombre_x">
+        Nombre del eje X
+    </label>
+
+    <input
+        type="text"
+        id="nombre_x"
+        name="nombre_x"
+        value="x"
+    >
+
+
+    <label for="nombre_y">
+        Nombre del eje Y
+    </label>
+
+    <input
+        type="text"
+        id="nombre_y"
+        name="nombre_y"
+        value="f(x)"
+    >
+
+
+    <button type="submit">
+        Generar gráfica
+    </button>
+
+</form>
+
+
+{% if error %}
+
+<div class="error">
+    {{ error }}
+</div>
+
+{% endif %}
+
+
+{% if grafica %}
+
+    <h2>Resultado</h2>
+
+    <div class="resultado-grafica">
+        <img
+            src="{{ url_for('static', filename='grafica_funcion.png') }}"
+            alt="Gráfica de la función"
+        >
+    </div>
+
+{% endif %}
+
+{% endblock %}
