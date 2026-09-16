@@ -2,7 +2,7 @@
 
 Proyecto de laboratorio para la simulación, monitorización
 y gestión de una infraestructura de datacenter y sistemas
-críticos.
+críticos y generación de gráficas y orbitas
 
 ## Componentes
 
