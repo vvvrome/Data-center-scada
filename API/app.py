@@ -590,7 +590,7 @@ def create_app(
     # =========================
 
     @app.route("/api/security/events")
-    @login_required()
+    @login_required(role="ADMIN")
     def security_events():
 
         return jsonify(
@@ -599,7 +599,7 @@ def create_app(
 
 
     @app.route("/api/plant")
-    @login_required()
+    @login_required(role="ADMIN")
     def plant_status():
 
         return jsonify(
@@ -607,7 +607,7 @@ def create_app(
         )
 
     @app.route("/api/plant/alerts")
-    @login_required()
+    @login_required(role="ADMIN")
     def plant_alerts():
 
         return jsonify(

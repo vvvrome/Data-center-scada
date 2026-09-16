@@ -90,6 +90,84 @@
 
     <section>
 
+        <section class="plant-dashboard">
+
+    <div class="section-title">
+        <h2>Nuclear Plant</h2>
+
+        <span id="dashboard-plant-status">
+            Loading...
+        </span>
+    </div>
+
+    <div class="plant-dashboard-card">
+
+        <div class="plant-dashboard-header">
+
+            <div>
+                <h3 id="dashboard-reactor-name">
+                    REACTOR-01
+                </h3>
+
+                <span>
+                    Reactor Core
+                </span>
+            </div>
+
+            <span
+                id="dashboard-reactor-status"
+                class="plant-status normal"
+            >
+                NORMAL
+            </span>
+
+        </div>
+
+        <div class="plant-dashboard-metrics">
+
+            <div>
+                    <span>TEMPERATURE</span>
+                    <strong id="dashboard-temperature">
+                        0 °C
+                    </strong>
+            </div>
+
+            <div>
+                <span>PRESSURE</span>
+                    <strong id="dashboard-pressure">
+                        0
+                    </strong>
+            </div>
+
+            <div>
+                <span>POWER</span>
+                    <strong id="dashboard-power">
+                        0 %
+                    </strong>
+            </div>
+
+            <div>
+                <span>WATER LEVEL</span>
+                    <strong id="dashboard-level">
+                        0 %
+                    </strong>
+            </div>
+
+            <div>
+                    <span>RADIATION</span>
+                    <strong id="dashboard-radiation">
+                        0
+                    </strong>
+           </div>
+
+            <a href="/plant" class="plant-dashboard-link">
+                Open Nuclear Plant →
+            </a>
+
+        </div>
+
+    </section>
+
         <div class="section-title">
             <h2>Infrastructure</h2>
             <span id="last-update">Waiting for data...</span>
@@ -1124,6 +1202,87 @@ async function updateSecurityEvents() {
 
 }
 
+async function updatePlantDashboard() {
+
+    try {
+
+        const response = await fetch("/api/plant");
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        const reactor = data.reactor;
+
+        // Estado general
+        document.getElementById(
+            "dashboard-plant-status"
+        ).textContent = reactor.status;
+
+        // Nombre
+        document.getElementById(
+            "dashboard-reactor-name"
+        ).textContent = reactor.name;
+
+        // Estado del reactor
+        const reactorStatus =
+            document.getElementById(
+                "dashboard-reactor-status"
+            );
+
+        reactorStatus.textContent =
+            reactor.status;
+
+        reactorStatus.className =
+            "plant-status " +
+            reactor.status.toLowerCase();
+
+        // Temperatura
+        document.getElementById(
+            "dashboard-temperature"
+        ).textContent =
+            `${reactor.temperature.toFixed(1)} °C`;
+
+        // Presión
+        document.getElementById(
+            "dashboard-pressure"
+        ).textContent =
+            `${reactor.pressure.toFixed(1)} bar`;
+
+        // Potencia
+        document.getElementById(
+            "dashboard-power"
+        ).textContent =
+            `${reactor.power.toFixed(1)} %`;
+
+        // Nivel de agua
+        document.getElementById(
+            "dashboard-level"
+        ).textContent =
+            `${reactor.water_level.toFixed(1)} %`;
+
+        // Radiación
+        document.getElementById(
+            "dashboard-radiation"
+        ).textContent =
+            reactor.radiation.toFixed(2);
+
+    } catch (error) {
+
+        console.error(
+            "Plant dashboard error:",
+            error
+        );
+
+        document.getElementById(
+            "dashboard-plant-status"
+        ).textContent =
+            "CONNECTION ERROR";
+    }
+}
+
 function updatePagination(totalPages) {
 
     document.getElementById("page-number").textContent =
@@ -1180,6 +1339,8 @@ function previousPage() {
 
 updateDashboard();
 updateAlerts();
+updateSecurityEvents();
+updatePlantDashboard();
 
 
 setInterval(
@@ -1191,6 +1352,16 @@ setInterval(
     updateAlerts,
     1000
 );
+
+setInterval(
+    updateSecurityEvents,
+    1000
+)
+
+setInterval(
+    updatePlantDashboard,
+    1000
+)
 
 </script>
 

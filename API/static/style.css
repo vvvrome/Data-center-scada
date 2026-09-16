@@ -1353,3 +1353,75 @@ main {
 
     transform: translateY(-1px);
 }
+
+.plant-dashboard {
+    margin-top: 24px;
+}
+
+.plant-dashboard-card {
+    padding: 20px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.45);
+}
+
+.plant-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.plant-dashboard-header h3 {
+    margin: 0;
+}
+
+.plant-dashboard-header span {
+    opacity: 0.65;
+    font-size: 0.8rem;
+}
+
+.plant-dashboard-metrics {
+    display: grid;
+    grid-template-columns:
+        repeat(5, 1fr);
+    gap: 12px;
+}
+
+.plant-dashboard-metrics > div {
+    padding: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 8px;
+}
+
+.plant-dashboard-metrics span {
+    display: block;
+    font-size: 0.7rem;
+    opacity: 0.6;
+    margin-bottom: 6px;
+}
+
+.plant-dashboard-metrics strong {
+    font-size: 1.1rem;
+}
+
+.plant-dashboard-link {
+    display: inline-block;
+    margin-top: 18px;
+    text-decoration: none;
+}
+
+@media (max-width: 900px) {
+
+    .plant-dashboard-metrics {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 500px) {
+
+    .plant-dashboard-metrics {
+        grid-template-columns: 1fr;
+    }
+}

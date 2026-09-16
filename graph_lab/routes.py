@@ -38,12 +38,7 @@ graph_bp = Blueprint(
     static_folder="static"
 )
 
-@graph_bp.route("/")
-def graph_index():
 
-    return render_template(
-        "graph_index.html"
-    )
 # =========================================================
 # AUTENTICACIÓN
 # =========================================================
@@ -82,6 +77,15 @@ def audit_graph(action, result, details=None):
         ip_address=request.remote_addr,
         user_agent=request.headers.get("User-Agent"),
         details=details
+    )
+
+
+@graph_bp.route("/", methods=["GET", "POST"])
+@graph_login_required
+def graph_index():
+
+    return render_template(
+        "graph_index.html"
     )
 
 
