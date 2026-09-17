@@ -1,10 +1,36 @@
 import sqlite3
+import json
+import logging
 from pathlib import Path
 from datetime import datetime
 
 
 BASE_DIR = Path(__file__).resolve().parent
 DB_PATH = BASE_DIR / "users.db"
+
+# Directorio de logs
+LOG_DIR = BASE_DIR.parent / "logs"
+LOG_DIR.mkdir(exist_ok=True)
+
+SECURITY_LOG = LOG_DIR / "security.log"
+
+
+# Logger utilizado por Wazuh
+security_logger = logging.getLogger("datacenter_security")
+security_logger.setLevel(logging.INFO)
+
+# Evitar añadir el handler varias veces cuando Flask recarga la aplicación
+if not security_logger.handlers:
+    file_handler = logging.FileHandler(
+        SECURITY_LOG,
+        encoding="utf-8"
+    )
+
+    file_handler.setLevel(logging.INFO)
+
+    security_logger.addHandler(file_handler)
+
+    security_logger.propagate = False
 
 
 def get_connection():
@@ -76,6 +102,28 @@ def log_event(
 
     connection.commit()
     connection.close()
+
+    # -------------------------------------------------
+    # LOG PARA WAZUH
+    # -------------------------------------------------
+
+    wazuh_event = {
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "source": "DataCenter_Lab",
+        "username": username,
+        "action": action,
+        "result": result,
+        "ip_address": ip_address,
+        "user_agent": user_agent,
+        "details": details
+    }
+
+    security_logger.info(
+        json.dumps(
+            wazuh_event,
+            ensure_ascii=False
+        )
+    )
 
 
 def get_audit_logs(limit=200):
