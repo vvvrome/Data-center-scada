@@ -92,6 +92,13 @@ def create_app(
                     return redirect(url_for("login"))
 
                 if role and user["role"] != role:
+                    print("ACCESS DENIED:", username, request.path, user["role"], role)
+                    audit(
+                        session.get("username", "UNKNOWN"),
+                        "ACCESS_DENIED",
+                        "BLOCKED",
+                        request.path
+                    )
                     return "Acceso denegado", 403
 
                 return f(*args, **kwargs)
